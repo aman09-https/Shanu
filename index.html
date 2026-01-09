@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Fix Things</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffcccc, #ffe6e6);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+            animation: fadeIn 1s;
+        }
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            z-index: 10; /* Ensure buttons are clickable */
+            position: relative;
+        }
+        button:hover {
+            background-color: #ff5252;
+        }
+        #no-button {
+            transition: transform 0.5s ease;
+        }
+        #hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .heart {
+            position: absolute;
+            color: #ff6b6b;
+            font-size: 2em;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        #extra-message {
+            display: none;
+            font-size: 1.1em;
+            margin-top: 20px;
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        #no-message {
+            display: none;
+            font-size: 1em;
+            color: #ff5252;
+            margin-top: 10px;
+        }
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5em; }
+            p { font-size: 1em; }
+            button { padding: 12px 25px; font-size: 1em; }
+            .buttons { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Shanu, Let's Fix Things ASAP</h1>
+    <p>I don't wanna lose this. What do you say?</p>
+    <div class="buttons">
+        <button id="yes-button">Yes</button>
+        <button id="no-button">No</button>
+    </div>
+    <p id="no-message">Are you sure? Try again!</p>
+    <div id="hearts"></div>
+    <p id="extra-message">Shanu, I'm sorry if I've messed up. Let's talk and make it right. You mean a lot to me! 💖</p>
+
+    <script>
+        const yesButton = document.getElementById('yes-button');
+        const noButton = document.getElementById('no-button');
+        const heartsContainer = document.getElementById('hearts');
+        const extraMessage = document.getElementById('extra-message');
+        const noMessage = document.getElementById('no-message');
+        const buttonsContainer = document.querySelector('.buttons');
+
+        // Function to move the No button randomly using transform for better mobile compatibility
+        function moveNoButton() {
+            const maxX = window.innerWidth - noButton.offsetWidth - 40; // Account for padding
+            const maxY = window.innerHeight - noButton.offsetHeight - 100; // Avoid bottom
+            const randomX = (Math.random() - 0.5) * maxX; // Center around 0 for translate
+            const randomY = (Math.random() - 0.5) * maxY;
+            noButton.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            noMessage.style.display = 'block'; // Show the teasing message
+        }
+
+        // Yes button click: Proceed to hearts and message
+        yesButton.addEventListener('click', () => {
+            buttonsContainer.style.display = 'none';
+            noMessage.style.display = 'none';
+            extraMessage.style.display = 'block';
+            
+            // Create floating hearts animation
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heartsContainer.appendChild(heart);
+                
+                // Remove heart after animation
+                setTimeout(() => heart.remove(), 3000);
+            }
+        });
+
+        // No button click: Make it run away
+        noButton.addEventListener('click', moveNoButton);
+
+        // Initial random position for No button (for fun, but optional)
+        // Removed initial move to keep it in place at start; it moves on first click
+    </script>
+</body>
+</html>
